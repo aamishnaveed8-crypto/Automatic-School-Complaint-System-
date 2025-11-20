@@ -1,0 +1,583 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ JSON.stringify($json) }}\n",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You will receive a complaint entry from a Google Form.  You must NOT lose any data.  Your job is ONLY to create a brief summary and return ALL original fields.  Return a JSON object with:  1. \"summary\": a short professional summary of the complaint. 2. All other fields EXACTLY as provided. Do NOT rename keys. Do NOT change values.  IMPORTANT: - Keep all original keys: Timestamp, Full Name, Email Address, Phone Number, Complaint Detail, Optional Category, Complaint ID. - If a field is empty, keep it empty. - Output valid JSON only."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "id": "8d1083b5-d7c8-4ba4-ad09-89f28045d323",
+      "name": "Summarize Complaint",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        -576,
+        -576
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {
+          "temperature": 0.7
+        }
+      },
+      "id": "8e54e90b-b169-453b-9719-2242d0df1876",
+      "name": "Groq Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        -352
+      ],
+      "credentials": {
+        "groqApi": {
+          "id": "MoUI2zzeFXf9ksRb",
+          "name": "Groq account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Complaint Sheet').item.json['Optional Category'] }}",
+                    "rightValue": "=Fee Issue",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "317c4fcd-fbad-4967-b3ed-aeeeb3a30499"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Fee Issue"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7e36e1a1-cf76-4839-810b-bb8ffc7301b4",
+                    "leftValue": "={{ $('Complaint Sheet').item.json['Optional Category'] }}",
+                    "rightValue": "Teacher Behavior",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Teacher Behavior"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "8f0a2dca-2ad4-413c-b402-64d80b395a40",
+                    "leftValue": "={{ $('Complaint Sheet').item.json['Optional Category'] }}",
+                    "rightValue": "Discipline",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Discipline"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "97cdc8d7-e0ca-4444-8ba5-67b27c2b7cbe",
+                    "leftValue": "={{ $('Complaint Sheet').item.json['Optional Category'] }}",
+                    "rightValue": "Technical Problem",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Technical Problem"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "15669b30-bb87-4c4f-b93c-eddeb98fc79c",
+                    "leftValue": "={{ $('Complaint Sheet').item.json['Optional Category'] }}",
+                    "rightValue": "Maintenance",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Maintenance"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9b1de4c1-2f40-4941-8fca-3bf151ea1128",
+                    "leftValue": "={{ $('Complaint Sheet').item.json['Optional Category'] }}",
+                    "rightValue": "Other",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Other"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -256,
+        -432
+      ],
+      "id": "05f10e88-358a-4b0b-915a-969a201967b7",
+      "name": "Departmental Router"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1U6RzxC3xaTTgwTJHD64sAivCjGor2KsPewNxk_41y80",
+          "mode": "list",
+          "cachedResultName": "Automatic Complaint System (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1U6RzxC3xaTTgwTJHD64sAivCjGor2KsPewNxk_41y80/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1585745114,
+          "mode": "list",
+          "cachedResultName": "Form Responses 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1U6RzxC3xaTTgwTJHD64sAivCjGor2KsPewNxk_41y80/edit#gid=1585745114"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -752,
+        -336
+      ],
+      "id": "882164be-9098-41a7-bbc9-200e85792c14",
+      "name": "Complaint Sheet",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "i3JLxaehQMbmmt4G",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "numberInputs": 6
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        80,
+        -432
+      ],
+      "id": "cd0cc8b0-e1a4-4a9c-9821-b78549991329",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{$json[\"to\"]}}",
+        "subject": "=New Complaint Received: {{ $json[\"Complaint ID\"] || \"No ID Provided\" }}\n",
+        "message": "=<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"UTF-8\" />\n  <style>\n    body {\n      background: #121212;\n      color: #e0e0e0;\n      font-family: Arial, sans-serif;\n      padding: 20px;\n      line-height: 1.6;\n    }\n\n    .container {\n      background: #1e1e1e;\n      padding: 25px;\n      border-radius: 10px;\n      max-width: 600px;\n      margin: auto;\n      box-shadow: 0 0 15px rgba(0,0,0,0.5);\n    }\n\n    h2 {\n      color: #ffffff;\n      border-bottom: 1px solid #333;\n      padding-bottom: 10px;\n    }\n\n    .row {\n      margin-bottom: 12px;\n    }\n\n    .label {\n      font-weight: bold;\n      color: #bbbbbb;\n    }\n\n    .value {\n      color: #ffffff;\n    }\n  </style>\n</head>\n<body>\n\n<div class=\"container\">\n  <h2>📩 New Complaint Received</h2>\n\n  <div class=\"row\"><span class=\"label\">Full Name:</span> <span class=\"value\">{{ $json[\"Full Name\"] }}</span></div>\n  <div class=\"row\"><span class=\"label\">Complaint ID:</span> <span class=\"value\">{{ $json[\"Complaint ID\"] }}</span></div>\n  <div class=\"row\"><span class=\"label\">Timestamp:</span> <span class=\"value\">{{ $json.Timestamp }}</span></div>\n  \n  <h3 style=\"color:#fff; margin-top:25px;\">📝 Complaint Details</h3>\n  <div class=\"row\"><span class=\"label\">Complaint Detail:</span> <span class=\"value\">{{ $json[\"Complaint Detail\"] }}</span></div>\n\n  <h3 style=\"color:#fff; margin-top:25px;\">📞 Contact Info</h3>\n  <div class=\"row\"><span class=\"label\">Email Address:</span> <span class=\"value\">{{ $json[\"Email Address\"] }}</span></div>\n  <div class=\"row\"><span class=\"label\">Phone Number:</span> <span class=\"value\">{{ $json[\"Phone Number\"] }}</span></div>\n\n  <div class=\"row\" style=\"margin-top:20px;\">\n    <span class=\"label\">Category:</span> \n    <span class=\"value\">{{ $json[\"Optional Category\"] }}</span>\n  </div>\n\n</div>\n\n</body>\n</html>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        432,
+        -80
+      ],
+      "id": "4143dfad-0788-4024-a03a-e9a6d86a715a",
+      "name": "Send a message",
+      "webhookId": "31dd2d64-ad59-45d5-ada1-b41c954bb7e3",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "dcPmxd9pns9U05kA",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1U6RzxC3xaTTgwTJHD64sAivCjGor2KsPewNxk_41y80",
+          "mode": "list",
+          "cachedResultName": "Automatic Complaint System (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1U6RzxC3xaTTgwTJHD64sAivCjGor2KsPewNxk_41y80/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1585745114,
+          "mode": "list",
+          "cachedResultName": "Form Responses 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1U6RzxC3xaTTgwTJHD64sAivCjGor2KsPewNxk_41y80/edit#gid=1585745114"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Full Name": "={{ $('Complaint Sheet').item.json[\"Full Name\"] }}",
+            "Complaint ID": "={{ $('Complaint Sheet').item.json[\"Complaint ID\"] }}",
+            "Timestamp": "={{ $('Complaint Sheet').item.json.Timestamp }}",
+            "Email Address": "={{ $('Complaint Sheet').item.json[\"Email Address\"] }}",
+            "Phone Number": "={{ $('Complaint Sheet').item.json[\"Phone Number\"] }}",
+            "Complaint Detail": "={{ $('Complaint Sheet').item.json[\"Complaint Detail\"] }}",
+            "Optional Category": "={{ $('Complaint Sheet').item.json[\"Optional Category\"] }}"
+          },
+          "matchingColumns": [
+            "Full Name"
+          ],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Complaint Detail",
+              "displayName": "Complaint Detail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Optional Category",
+              "displayName": "Optional Category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Complaint ID",
+              "displayName": "Complaint ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        432,
+        -368
+      ],
+      "id": "d3652892-0c35-4baf-8f0c-ca735a517157",
+      "name": "Update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "OPsV99e0SXqstjxw",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop through all incoming items\nreturn items.map(function(item) {\n    // Get current date in YYYYMMDD format\n    const now = new Date();\n    const datePart = now.toISOString().split('T')[0].replace(/-/g, '');\n\n    // Generate random 4-digit number\n    const randomPart = Math.floor(1000 + Math.random() * 9000);\n\n    // Create complaint ID\n    const complaintId = \"CMP-\" + datePart + \"-\" + randomPart;\n\n    // Return item with complaint_id added\n    return {\n        json: {\n            ...item.json,\n            complaint_id: complaintId\n        }\n    };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        256,
+        -368
+      ],
+      "id": "eb136273-1100-4de6-afee-7155db857e99",
+      "name": "Complaint Id Generator"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Map categories to email addresses\nconst emailMap = {\n  \"Fee Issue\": \"aamishnaveed8@gmail.com\",\n  \"Teacher Behavior\": \"aamishnaveed703@gmail.com\",\n  \"Discipline\": \"aamishnaveed8@gmail.com\",\n  \"Technical Problem\": \"aamishnaveed703@gmail.com\",\n  \"Maintenance\": \"aamishtagga@gmail.com\",\n  \"Other\": \"aamishtagga@gmail.com\"   // default\n};\n\nreturn items.map(item => {\n  const data = item.json;\n\n  return {\n    json: {\n      ...data,  // ⬅️ Keep ALL Google Sheet fields without losing anything\n      to: emailMap[data[\"Optional Category\"]] || \"aamishtagga@gmail.com\"\n    }\n  };\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        192,
+        -80
+      ],
+      "id": "8d5b9753-6000-423d-913a-b7a5a806b6c9",
+      "name": "Departmental Email Mapping"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Summarize Complaint",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarize Complaint": {
+      "main": [
+        [
+          {
+            "node": "Departmental Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Complaint Sheet": {
+      "main": [
+        [
+          {
+            "node": "Summarize Complaint",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Departmental Router": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ],
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ],
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 4
+          }
+        ],
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 5
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Complaint Id Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Departmental Email Mapping",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Complaint Id Generator": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Departmental Email Mapping": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a5f055d7-59c3-4470-a1d3-07b92869916e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7a57a8653f95c905bc1237886644d16adacd2e5f32899d1e607657d759b22c4c"
+  },
+  "id": "cAMb9gaBRC43rLZh",
+  "tags": []
+}
